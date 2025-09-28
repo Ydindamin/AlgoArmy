@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://gmjwgupkaje1"]
+
+[ext_resource type="Script" path="res://structures/Spawner.gd" id="1_tj7fq"]
+[ext_resource type="Texture2D" uid="uid://d3i8djgn3ojy4" path="res://img/square.png" id="2_eomcn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_05003"]
+
+[node name="Spawner" type="StaticBody2D"]
+script = ExtResource("1_tj7fq")
+_team = null
+_maxHP = null
+_armorVal = null
+_sightRadius = null
+_weaponRange = null
+_aimingErr = null
+_unitToSpawn = null
+_spawnCooldown = null
+
+[node name="SpawnerSprite" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_eomcn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_05003")
