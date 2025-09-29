@@ -51,7 +51,7 @@ func _ready():
 func _process(delta):
 	_unitsInArea = get_capturers()
 	for u: BaseUnit in _unitsInArea:
-		capture(u._team, 0.2 * delta)
+		capture(u._team, 0.1 * delta)
 	if _isActive:
 		_spawnCooldown = _spawnCooldown - delta
 		if _spawnCooldown <= 0.0:

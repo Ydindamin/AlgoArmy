@@ -8,33 +8,47 @@
 script = ExtResource("1_o50qu")
 
 [node name="spawner1" parent="." node_paths=PackedStringArray("_rallyPoint") instance=ExtResource("3_malnu")]
-position = Vector2(200, 500)
+position = Vector2(200, 540)
 _team = Color(0, 1, 1, 1)
-_rallyPoint = NodePath("../Rally N")
+_rallyPoint = NodePath("../Rally W")
 
 [node name="unit1" parent="spawner1" instance=ExtResource("2_clgm7")]
 position = Vector2(100, 0)
 _team = Color(0, 1, 1, 1)
 
 [node name="spawner2" parent="." node_paths=PackedStringArray("_rallyPoint") instance=ExtResource("3_malnu")]
-position = Vector2(1578, 500)
+position = Vector2(1720, 540)
 _team = Color(1, 0, 1, 1)
-_rallyPoint = NodePath("../Rally S")
+_rallyPoint = NodePath("../Rally E")
 
 [node name="unit2" parent="spawner2" instance=ExtResource("2_clgm7")]
 position = Vector2(-100, 0)
 _team = Color(1, 0, 1, 1)
 
 [node name="spawner3" parent="." node_paths=PackedStringArray("_rallyPoint") instance=ExtResource("3_malnu")]
-position = Vector2(688, 150)
-_rallyPoint = NodePath("../Rally S")
-
-[node name="spawner4" parent="." node_paths=PackedStringArray("_rallyPoint") instance=ExtResource("3_malnu")]
-position = Vector2(1088, 850)
+position = Vector2(760, 150)
 _rallyPoint = NodePath("../Rally N")
 
+[node name="spawner4" parent="." node_paths=PackedStringArray("_rallyPoint") instance=ExtResource("3_malnu")]
+position = Vector2(1160, 930)
+_rallyPoint = NodePath("../Rally S")
+
+[node name="spawner5" parent="." node_paths=PackedStringArray("_rallyPoint") instance=ExtResource("3_malnu")]
+position = Vector2(100, 980)
+_rallyPoint = NodePath("../Rally W")
+
+[node name="spawner6" parent="." node_paths=PackedStringArray("_rallyPoint") instance=ExtResource("3_malnu")]
+position = Vector2(1820, 100)
+_rallyPoint = NodePath("../Rally E")
+
 [node name="Rally N" type="Node2D" parent="."]
-position = Vector2(888, 333)
+position = Vector2(960, 390)
 
 [node name="Rally S" type="Node2D" parent="."]
-position = Vector2(888, 667)
+position = Vector2(960, 690)
+
+[node name="Rally E" type="Node2D" parent="."]
+position = Vector2(1110, 540)
+
+[node name="Rally W" type="Node2D" parent="."]
+position = Vector2(810, 540)
