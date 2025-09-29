@@ -11,8 +11,8 @@ extends StaticBody2D
 @export var _weaponDamageMax: float = 0.0
 @export var _weaponCooldownMax: float = 1.0
 @export var _isActive: bool = false
-@export var _spawnCooldownMax: float = 10.0
-@export var _unitToSpawn: BaseUnit
+@export var _spawnCooldownMax: float = 8.0
+@export var _rallyPoint: Node2D
 
 const TEAM_NEUTRAL: Color = Color(0.5, 0.5, 0.5)
 const UNIT_TEMPLATE: PackedScene = preload("res://units/BaseUnit.tscn")
@@ -20,7 +20,6 @@ const UNIT_TEMPLATE: PackedScene = preload("res://units/BaseUnit.tscn")
 @onready var _sprite: Sprite2D = $SpawnerSprite
 @onready var _captureArea: Area2D = $CaptureArea
 @onready var _captureBar: ProgressBar = $CaptureBar
-@onready var _rallyPoint: Vector2 = $RallyPoint.global_position
 
 var _HP: float
 var _weaponCooldown: float
@@ -36,13 +35,23 @@ var _spawnCooldown: float
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	_sprite.modulate = _team
+	if _team != TEAM_NEUTRAL:
+		_captureTeam = _team
+		_captureProgress = 1.0
+		_isActive = true
+	else:
+		_captureTeam = TEAM_NEUTRAL
+		_captureProgress = 0.0
+		_isActive = false
+	_captureBar.value = _captureProgress
+	_captureBar.get_theme_stylebox("fill").set_bg_color(_captureTeam)
 	_spawnCooldown = _spawnCooldownMax
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	_unitsInArea = get_capturers()
 	for u: BaseUnit in _unitsInArea:
-		capture(u._team, 0.333 * delta, _captureBar)
+		capture(u._team, 0.2 * delta)
 	if _isActive:
 		_spawnCooldown = _spawnCooldown - delta
 		if _spawnCooldown <= 0.0:
@@ -60,12 +69,14 @@ func take_damage(dmg: float) -> void:
 
 func spawn_unit(unitToSpawn: PackedScene) -> void:
 	var newUnit = unitToSpawn.instantiate()
+	add_child(newUnit)
+	newUnit.init(self)
 
 func get_capturers() -> Array:
-	var units = ($CaptureArea.get_overlapping_bodies()).map(func(unit) -> BaseUnit: return unit as BaseUnit).filter(func(unit) -> bool: return unit != null)
+	var units = (_captureArea.get_overlapping_bodies()).map(func(unit) -> BaseUnit: return unit as BaseUnit).filter(func(unit) -> bool: return unit != null)
 	return units
 
-func capture(capturingTeam: Color, newProgress: float, bar: ProgressBar) -> void:
+func capture(capturingTeam: Color, newProgress: float) -> void:
 	if capturingTeam == _captureTeam:
 		_captureProgress = _captureProgress + newProgress
 	else:
@@ -81,13 +92,13 @@ func capture(capturingTeam: Color, newProgress: float, bar: ProgressBar) -> void
 		_captureTeam = capturingTeam
 		_captureProgress = abs(_captureProgress)
 	
-	bar.value = _captureProgress
-	bar.get_theme_stylebox("fill").set_bg_color(_captureTeam)
+	_captureBar.value = _captureProgress
+	_captureBar.get_theme_stylebox("fill").set_bg_color(_captureTeam)
 	
 	if _captureTeam == _team and _captureProgress == 1.0:
-		bar.visible = false
+		_captureBar.visible = false
 	else:
-		bar.visible
+		_captureBar.visible = true
 
 func set_team(newTeam: Color) -> void:
 	_team = newTeam

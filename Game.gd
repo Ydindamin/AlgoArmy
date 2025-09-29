@@ -1,7 +1,7 @@
 extends Node2D
 
 
-var _allUnits: Array[BaseUnit]
+var _allUnits: Array
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
