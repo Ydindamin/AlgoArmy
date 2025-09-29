@@ -17,7 +17,7 @@ extends CharacterBody2D
 
 const SQUAD_SIZE_MAX: int = 1								# (TODO: implement squads)
 
-var _spawner: Spawner
+#var _spawner: Spawner
 var _HP: float
 var _weaponCooldown: float
 var _shootTarget: Vector2
@@ -59,7 +59,7 @@ func _physics_process(delta):
 		move_and_slide()
 
 
-func init(spawnedFrom: Spawner):
+func init():#spawnedFrom: Spawner):
 	pass
 
 

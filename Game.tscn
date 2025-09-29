@@ -1,17 +1,34 @@
-[gd_scene load_steps=4 format=3 uid="uid://b3ex4dbvo6v6m"]
+[gd_scene load_steps=5 format=3 uid="uid://b3ex4dbvo6v6m"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_o50qu"]
 [ext_resource type="PackedScene" uid="uid://c36hkf12kmdkg" path="res://units/BaseUnit.tscn" id="2_clgm7"]
-[ext_resource type="PackedScene" uid="uid://qlfvq7n14nrb" path="res://structures/BaseStructure.tscn" id="3_iqx7k"]
+[ext_resource type="PackedScene" uid="uid://gmjwgupkaje1" path="res://structures/Spawner.tscn" id="3_malnu"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0i0wo"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_o50qu")
 
+[node name="spawner1" parent="." instance=ExtResource("3_malnu")]
+position = Vector2(197, 502)
+physics_material_override = SubResource("PhysicsMaterial_0i0wo")
+_rallyPoint = Vector2(100, 100)
+_team = Color(0, 1, 1, 1)
+
+[node name="spawner2" parent="." instance=ExtResource("3_malnu")]
+position = Vector2(1619, 498)
+_team = Color(1, 0, 1, 1)
+
 [node name="unit1" parent="." instance=ExtResource("2_clgm7")]
-position = Vector2(300, 300)
+position = Vector2(290, 501)
+_team = Color(0, 1, 1, 1)
 
 [node name="unit2" parent="." instance=ExtResource("2_clgm7")]
-position = Vector2(545, 248)
+position = Vector2(1525, 495)
+_team = Color(1, 0, 1, 1)
 
-[node name="Structure" parent="." instance=ExtResource("3_iqx7k")]
-position = Vector2(387, 183)
+[node name="spawner3" parent="." instance=ExtResource("3_malnu")]
+position = Vector2(967, 865)
+
+[node name="spawner4" parent="." instance=ExtResource("3_malnu")]
+position = Vector2(698, 131)

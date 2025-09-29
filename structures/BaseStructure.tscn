@@ -1,16 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://qlfvq7n14nrb"]
+[gd_scene load_steps=2 format=3 uid="uid://qlfvq7n14nrb"]
 
 [ext_resource type="Script" path="res://structures/BaseStructure.gd" id="1_jnux5"]
-[ext_resource type="Texture2D" uid="uid://d3i8djgn3ojy4" path="res://img/square.png" id="2_g67pi"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_l4o2u"]
-size = Vector2(32, 32)
 
 [node name="Structure" type="StaticBody2D"]
 script = ExtResource("1_jnux5")
-
-[node name="StructureSprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_g67pi")
-
-[node name="StructureShape" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_l4o2u")
