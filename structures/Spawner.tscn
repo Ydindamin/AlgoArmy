@@ -32,3 +32,6 @@ show_percentage = false
 
 [node name="CaptureShape" type="CollisionShape2D" parent="CaptureArea"]
 shape = SubResource("CircleShape2D_2x0cl")
+
+[node name="RallyPoint" type="Node2D" parent="."]
+position = Vector2(256, 0)

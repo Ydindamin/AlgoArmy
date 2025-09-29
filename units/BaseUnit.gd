@@ -17,7 +17,7 @@ extends CharacterBody2D
 
 const SQUAD_SIZE_MAX: int = 1								# (TODO: implement squads)
 
-#var _spawner: Spawner
+var _spawner: Spawner
 var _HP: float
 var _weaponCooldown: float
 var _shootTarget: Vector2
@@ -59,17 +59,23 @@ func _physics_process(delta):
 		move_and_slide()
 
 
-func init():#spawnedFrom: Spawner):
-	pass
+func init(origin: Spawner):
+	_spawner = origin
+	_team = _spawner._team
+	_sprite.modulate = _team
+	_behaviorState = States.RALLY
+	_moveTarget = _spawner._rallyPoint
 
 
 func determineAction() -> void:
 	if _behaviorState == States.INACTIVE:
 		pass
 	if _behaviorState == States.RALLY:
-		pass
+		if (_moveTarget - global_position).length() < 64.0:
+			_behaviorState = States.SEARCH
 	if _behaviorState == States.MOVE:
-		pass
+		if (_moveTarget - global_position).length() < 64.0:
+			_behaviorState = States.STANDGROUND
 	if _behaviorState == States.ATTACKMOVE:
 		pass
 	if _behaviorState == States.SEARCH:

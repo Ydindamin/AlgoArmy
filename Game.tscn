@@ -12,8 +12,8 @@ script = ExtResource("1_o50qu")
 [node name="spawner1" parent="." instance=ExtResource("3_malnu")]
 position = Vector2(197, 502)
 physics_material_override = SubResource("PhysicsMaterial_0i0wo")
-_rallyPoint = Vector2(100, 100)
 _team = Color(0, 1, 1, 1)
+_rallyPoint = Vector2(100, 100)
 
 [node name="spawner2" parent="." instance=ExtResource("3_malnu")]
 position = Vector2(1619, 498)
