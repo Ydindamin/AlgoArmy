@@ -50,8 +50,12 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	_unitsInArea = get_capturers()
-	for u: BaseUnit in _unitsInArea:
-		capture(u._team, 0.1 * delta)
+	if _unitsInArea.size() > 0:
+		capture(_unitsInArea)
+	
+	#for u: BaseUnit in _unitsInArea:
+		#capture(u._team, 0.1 * delta)
+	
 	if _isActive:
 		_spawnCooldown = _spawnCooldown - delta
 		if _spawnCooldown <= 0.0:
@@ -76,11 +80,36 @@ func get_capturers() -> Array:
 	var units = (_captureArea.get_overlapping_bodies()).map(func(unit) -> BaseUnit: return unit as BaseUnit).filter(func(unit) -> bool: return unit != null)
 	return units
 
-func capture(capturingTeam: Color, newProgress: float) -> void:
+func capture(units: Array) -> void:
+	var capturers: Dictionary
+	
+	for u: BaseUnit in units: # group capturers by team
+		if !capturers.has(u._team):
+			capturers.set({u._team: 1})
+		else:
+			capturers.set({u._team: capturers.get(u._team) + 1})
+	
+	if capturers.size() > 0:
+		determine_capture(capturers)
+
+func determine_capture(capturers: Dictionary) -> void:
+	var captureCounts: Array = capturers.values()
+	captureCounts.sort()
+	var mostCount: int = captureCounts[-1]
+	var secondMostCount: int = 0
+	
+	if capturers.size() > 1:
+		secondMostCount = captureCounts[-2]
+	
+	var captureQuantity: int = mostCount - secondMostCount
+	if captureQuantity > 0:
+		advance_capture(capturers.find_key(mostCount), captureQuantity)
+
+func advance_capture(capturingTeam: Color, capturingQty: int) -> void:
 	if capturingTeam == _captureTeam:
-		_captureProgress = _captureProgress + newProgress
+		_captureProgress = _captureProgress + capturingQty
 	else:
-		_captureProgress = _captureProgress - newProgress
+		_captureProgress = _captureProgress - capturingQty
 	
 	if _captureProgress >= 1.0:
 		_captureProgress = 1.0
