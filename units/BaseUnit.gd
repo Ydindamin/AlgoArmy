@@ -22,12 +22,12 @@ const SQUAD_SIZE_MAX: int = 1								# (TODO: implement squads)
 var _spawner: Spawner
 var _HP: float
 var _weaponCooldown: float
-var _shootTarget: Vector2
+#var _shootTarget: Vector2
 var _lookDirection: Vector2
 var _moveTarget: Vector2
-var _squadSize: int											# (TODO: implement squads)
+#var _squadSize: int											# (TODO: implement squads)
 var _protectTarget: BaseUnit
-var _oscillator: float
+#var _oscillator: float
 
 
 enum States {
@@ -42,7 +42,7 @@ enum States {
 
 
 func _ready():
-	print_debug("Unit Ready!")
+	#print_debug("Unit Ready!")
 	_sprite.modulate = _team
 	_spawner = get_parent()
 	_HP = _maxHP
@@ -50,12 +50,12 @@ func _ready():
 	_lookDirection = ((get_viewport_rect().size * 0.5) - global_position).normalized()
 	_behaviorState = States.RALLY
 	_sightRadius.get_child(0).shape.radius = _visionDistance
-	_oscillator = _oscillatorMax
+	#_oscillator = _oscillatorMax
 
 func _physics_process(delta):
-	_oscillator = _oscillator - delta
-	if _oscillator < 0.0:
-		_oscillator = _oscillator + _oscillatorMax
+	#_oscillator = _oscillator - delta
+	#if _oscillator < 0.0:
+		#_oscillator = _oscillator + _oscillatorMax
 	if !(_behaviorState == States.INACTIVE or _behaviorState == States.DEAD):
 		determine_move_target()
 		var moveVector: Vector2 = determine_move_vector()
@@ -65,7 +65,7 @@ func _physics_process(delta):
 
 
 func init(origin: Spawner):
-	print_debug("Unit Init!")
+	#print_debug("Unit Init!")
 	_sprite = $UnitSprite
 	_sightRadius = $SightRadius
 	_spawner = origin
