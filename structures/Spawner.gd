@@ -4,27 +4,28 @@ extends StaticBody2D
 
 @export var _team: Color = Color(0.5, 0.5, 0.5)
 @export var _maxHP: float = 10000.0
-@export var _armorVal: float = 10.0
-@export var _sightRadius = 256.0
-@export var _weaponRange = 0.0
-@export var _aimingErr: float = 128.0
-@export var _weaponDamageMax: float = 0.0
-@export var _weaponCooldownMax: float = 1.0
+#@export var _armorVal: float = 10.0
+#@export var _sightRadius = 256.0
+#@export var _weaponRange = 0.0
+#@export var _aimingErr: float = 128.0
+#@export var _weaponDamageMax: float = 0.0
+#@export var _weaponCooldownMax: float = 1.0
 @export var _isActive: bool = false
 @export var _spawnCooldownMax: float = 8.0
 @export var _rallyPoint: Node2D
 
 const TEAM_NEUTRAL: Color = Color(0.5, 0.5, 0.5)
 const UNIT_TEMPLATE: PackedScene = preload("res://units/BaseUnit.tscn")
+const CAPTURE_STRENGTH: float = 0.1
 
 @onready var _sprite: Sprite2D = $SpawnerSprite
 @onready var _captureArea: Area2D = $CaptureArea
 @onready var _captureBar: ProgressBar = $CaptureBar
 
 var _HP: float
-var _weaponCooldown: float
-var _shootTarget: Vector2
-var _lookDirection: Vector2
+#var _weaponCooldown: float
+#var _shootTarget: Vector2
+#var _lookDirection: Vector2
 var _isDestroyed: bool
 var _captureTeam: Color
 var _captureProgress: float
@@ -34,6 +35,7 @@ var _spawnCooldown: float
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	_HP = _maxHP
 	_sprite.modulate = _team
 	if _team != TEAM_NEUTRAL:
 		_captureTeam = _team
@@ -51,10 +53,7 @@ func _ready():
 func _process(delta):
 	_unitsInArea = get_capturers()
 	if _unitsInArea.size() > 0:
-		capture(_unitsInArea)
-	
-	#for u: BaseUnit in _unitsInArea:
-		#capture(u._team, 0.1 * delta)
+		capture(_unitsInArea, delta)
 	
 	if _isActive:
 		_spawnCooldown = _spawnCooldown - delta
@@ -80,19 +79,19 @@ func get_capturers() -> Array:
 	var units = (_captureArea.get_overlapping_bodies()).map(func(unit) -> BaseUnit: return unit as BaseUnit).filter(func(unit) -> bool: return unit != null)
 	return units
 
-func capture(units: Array) -> void:
+func capture(units: Array, delta: float) -> void:
 	var capturers: Dictionary
 	
 	for u: BaseUnit in units: # group capturers by team
 		if !capturers.has(u._team):
-			capturers.set({u._team: 1})
+			capturers.set(u._team, 1)
 		else:
-			capturers.set({u._team: capturers.get(u._team) + 1})
+			capturers.set(u._team, capturers.get(u._team) + 1)
 	
 	if capturers.size() > 0:
-		determine_capture(capturers)
+		determine_capture(capturers, delta)
 
-func determine_capture(capturers: Dictionary) -> void:
+func determine_capture(capturers: Dictionary, delta: float) -> void:
 	var captureCounts: Array = capturers.values()
 	captureCounts.sort()
 	var mostCount: int = captureCounts[-1]
@@ -103,13 +102,14 @@ func determine_capture(capturers: Dictionary) -> void:
 	
 	var captureQuantity: int = mostCount - secondMostCount
 	if captureQuantity > 0:
-		advance_capture(capturers.find_key(mostCount), captureQuantity)
+		advance_capture(capturers.find_key(mostCount), captureQuantity, delta)
 
-func advance_capture(capturingTeam: Color, capturingQty: int) -> void:
+func advance_capture(capturingTeam: Color, capturingQty: int, delta: float) -> void:
+	var captureAmount: float = CAPTURE_STRENGTH * capturingQty
 	if capturingTeam == _captureTeam:
-		_captureProgress = _captureProgress + capturingQty
+		_captureProgress = _captureProgress + captureAmount * delta
 	else:
-		_captureProgress = _captureProgress - capturingQty
+		_captureProgress = _captureProgress - captureAmount * delta
 	
 	if _captureProgress >= 1.0:
 		_captureProgress = 1.0
